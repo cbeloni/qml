@@ -1,6 +1,7 @@
 import QtQuick 1.0
 
  ListModel {
+    id: nomesModel
      ListElement {
          name: "Bill Smith"
          number: "555 3264"

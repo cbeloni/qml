@@ -22,31 +22,55 @@ Row{
 		     focus: true    
 		 } 	
 		}
-
+ 
 	Rectangle{
 	     id: lista
 	     width: 200; height: 200
 	     color: "lightgray"
-		 ListView {
-		     width: 180; height: 200
-
-		     model: ContactModel {}
-		     delegate: Text {
-			 text: name + ": " + number
+	     ListModel {
+		    id: nomesModel
+		     ListElement {
+		         name: "Cauê Beloni"
+		         number: "555 3264"
+		     }
+		     ListElement {
+		         name: "Raquel"
+		         number: "555 8426"
+		     }
+		     ListElement {
+		         name: "Ísis"
+		         number: "555 0473"
 		     }
 		 }
-		MouseArea  {
-			anchors.fill: parent
-			acceptedButtons: Qt.LeftButton | Qt.RightButton
-			onClicked:  {
-			    if (mouse.button == Qt.RightButton)
-				parent.color = 'blue';
-				
-			
-			    else
-				parent.color = 'red';
-		}
-	    } 
+	     Component {
+         id: contactDelegate
+	     Item {
+	             width: 180; height: 40
+	             Column {
+	                 Text { text: '<b>Name :  </b> ' + name }
+	                 Text { text: '<b>Number : </b> ' + number }
+	             }
+	             MouseArea {
+                 anchors.fill: parent
+                 acceptedButtons: Qt.LeftButton | Qt.RightButton
+                 onClicked: 
+                 			{   if (mouse.button == Qt.RightButton)
+							        nomesModel.move(index, index+1, 1);
+								
+							    else
+							        nomesModel.move(index, index-1, 1);
+							}
+             	 }
+	         }
+	     }
+		 ListView {
+		 	 id: listViewContatos
+		     width: 180; height: 200
+
+		     model: nomesModel
+		     delegate: contactDelegate
+		     highlight: Rectangle { color: "lightsteelblue"; radius: 5 }
+		 }		
 	}
 
 	Rectangle  {
@@ -65,4 +89,16 @@ Row{
 		}
 	    }
 	}
+	Rectangle{
+     id:simplebutton
+     width: 100; height: 100     
+
+     MouseArea{
+         id: buttonMouseArea
+
+         anchors.fill: parent //anchor all sides of the mouse area to the rectangle's anchors
+                 //onClicked handles valid mouse button clicks
+         onClicked: console.log( " clicked -> " + ListView.currentIndex(0))
+     }
+ }
  }
